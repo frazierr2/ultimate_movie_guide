@@ -1,20 +1,18 @@
 <template>
   <div class="hello">
-    <!-- <b-jumbotron header="BootstrapVue" lead="Bootstrap 4 Components for Vue.js 2">
-      <p>For more information visit website</p>
-      <b-button variant="primary" href="#">More Info</b-button>
-    </b-jumbotron>-->
     <h1 id="app-name">Ultimate Movie Guide</h1>
     <div>
       <h2 id="caption-one">See what's next.</h2>
       <h4 id="caption-two">WATCH ANYWHERE, ANYTIME</h4>
 
-      <div id="search-button">
-        SEARCH MOVIES
-        <span id="search-caret">
-          <font-awesome-icon icon="angle-right"/>
-        </span>
-      </div>
+      <router-link to="/search" class="search-button-link">
+        <div id="search-button">
+          SEARCH MOVIES
+          <span id="search-caret">
+            <font-awesome-icon icon="angle-right"/>
+          </span>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -22,17 +20,15 @@
 <script>
 export default {
   name: "LandingPage",
-  props: {
-    msg: String
+  props: {},
+  data() {
+    return {};
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.hello {
-  /* padding: 0 15px; */
-}
 #app-name {
   font-family: "Bangers", cursive;
   font-size: 100px;
@@ -45,6 +41,9 @@ export default {
 #caption-two {
   font-size: 40px;
   color: white;
+}
+.search-button-link {
+  text-decoration: none;
 }
 #search-button {
   background-color: #e50614;

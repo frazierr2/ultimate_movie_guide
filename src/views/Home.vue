@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <LandingPage msg="test to Your Vue.js ApNOp"/>
+    <LandingPage/>
   </div>
 </template>
 
@@ -13,6 +13,9 @@ export default {
   name: "home",
   components: {
     LandingPage
+  },
+  data() {
+    return {};
   }
 };
 </script>
