@@ -23,3 +23,9 @@ git commit -m 'deploy'
 git push -f git@github.com:frazierr2/ultimate_movie_guide.git master:gh-pages
 
 cd -
+
+
+
+
+#To run deploy script on mac terminal 
+# sh deploy.sh
