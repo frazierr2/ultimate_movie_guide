@@ -2,7 +2,14 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link>
-      <!-- <router-link to="/about">About</router-link> -->
+
+      <!-- <input
+        id="searchInput"
+        class="mb-2 mr-sm-2 mb-sm-0"
+        placeholder="Search Ultimate Movie Guide"
+        v-model="searchTerm"
+        v-if="this.$route.path == '/search'"
+      >-->
     </div>
     <router-view/>
   </div>
@@ -29,7 +36,6 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  /* color: #2c3e50; */
   background-color: black;
   height: 100vh;
 }

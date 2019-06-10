@@ -6,7 +6,7 @@
       placeholder="Search Ultimate Movie Guide"
       v-model="searchTerm"
     >
-    <!-- <button variant="primary" @click="searchDB">Search</button> -->
+    <button variant="primary" @click="searchDB()">Search</button>
 
     <b-container id="movie-list-container" class="mt-3" fluid>
       <b-row class="movie-list-container-row">
@@ -34,12 +34,13 @@
         <b-col class="list-column" cols="11">
           <p class="selected-option-text" :selectedOption="selectedOption">{{ selectedOption }}</p>
           <b-row>
-            <b-col v-for="popularItem in moviesArray[0]" :key="popularItem.id" cols="3">
+            <b-col v-for="(movie, index) in moviesArray[0]" :key="index" cols="3">
               <img
                 class="movie-banner-picture"
-                :src="'//image.tmdb.org/t/p/h632/'+ popularItem.poster_path"
+                :src="'//image.tmdb.org/t/p/h632/'+ movie.poster_path"
+                @click="getDetails(index)"
               >
-              <p class="text-muted">{{ popularItem.original_title }}</p>
+              <p class="text-muted">{{ movie.original_title }}</p>
             </b-col>
           </b-row>
         </b-col>
@@ -59,18 +60,15 @@ export default {
       baseURL: baseURL,
       selectedOption: "",
       searchTerm: "",
-      searchArray: [],
-      popularArray: [],
       moviesArray: []
     };
   },
   watch: {
-    moviesArray() {
-      // console.log("The counter has changed!");
-    }
+    moviesArray() {}
   },
   methods: {
     generatePopularMovies() {
+      this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Popular Movies";
       var url = ` 
@@ -84,10 +82,10 @@ export default {
         })
         .then(jsonData => {
           this.moviesArray.push(jsonData.results);
-          // this.popularArray.push(jsonData.results);
         });
     },
     generateTopRated() {
+      this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Top Rated";
       var url = ` 
@@ -104,6 +102,7 @@ export default {
         });
     },
     generateNowPlaying() {
+      this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Now Playing";
       var url = ` 
@@ -118,26 +117,39 @@ export default {
         .then(jsonData => {
           this.moviesArray.push(jsonData.results);
         });
-    }
-    // searchDB() {
-    //   var encodedTerm = encodeURI(this.searchTerm),
-    //     // url = `${this.baseURL}search/movie?api_key=${
-    //     //   this.apikey
-    //     // }&query=${encodedTerm}`;
+    },
+    searchDB() {
+      this.moviesArray = [];
+      this.selectedOption = this.searchTerm;
 
-    //   fetch(url, {
-    //     method: "get"
-    //   })
-    //     .then(response => {
-    //       return response.json();
-    //     })
-    //     .then(jsonData => {
-    //       // this.bookResults = Object.values(jsonData.books);
-    //       // this.searchArray = Object.values(jsonData.results);
-    //       this.searchArray.push(Object.values(jsonData.results));
-    //       // console.log(Object.values(jsonData.results));
-    //     });
-    // }
+      var encodedTerm = encodeURI(this.searchTerm),
+        url = `${this.baseURL}search/movie?api_key=${
+          this.apikey
+        }&query=${encodedTerm}`;
+
+      fetch(url, {
+        method: "get"
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(jsonData => {
+          this.moviesArray.push(jsonData.results);
+        });
+
+      if (this.searchTerm.length == 0) {
+        alert("empty");
+      }
+    },
+    // Gets object by index and passes to detail view to display more data
+    getDetails(index) {
+      let movieDetails = this.moviesArray[0][index];
+
+      this.$router.push({
+        name: "movieDetails",
+        params: { movie: movieDetails }
+      });
+    }
   },
   mounted() {
     this.generatePopularMovies();
