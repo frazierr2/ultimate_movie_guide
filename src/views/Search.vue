@@ -147,7 +147,11 @@ export default {
 
       this.$router.push({
         name: "movieDetails",
-        params: { movie: movieDetails }
+        params: {
+          movie: movieDetails,
+          baseURL: this.baseURL,
+          apikey: this.apikey
+        }
       });
     }
   },
@@ -165,18 +169,22 @@ export default {
   width: 50%;
 }
 #movie-list-container {
-  border: 1px solid yellow;
-  height: 80vh;
+  /* border: 1px solid yellow; */
+  height: 85vh;
+  overflow: scroll;
 }
 .movie-list-container-row {
   height: 100%;
 }
 .button-column {
-  background: red;
+  /* background: red; */
+  background-color: rgba(255, 255, 255, 0.8);
+  border-right: 1px solid lightgrey;
   padding: 0;
 }
 .list-column {
-  background: white;
+  /* background: white; */
+  background-color: rgba(255, 255, 255, 0.8);
 }
 .button-rows {
   height: 100px;
@@ -199,6 +207,7 @@ export default {
   height: 300px;
   margin: 5px 0;
   padding: 0 15px;
+  box-shadow: 4px 4px 10px grey;
 }
 .selected-option-text {
   text-align: left;

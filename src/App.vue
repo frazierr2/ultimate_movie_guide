@@ -42,6 +42,7 @@ html {
 #nav {
   padding: 30px;
   text-align: left;
+  padding-bottom: 0;
 }
 
 #nav a {
