@@ -9,10 +9,12 @@ import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
-library.add(faAngleRight, farStar, faChartBar, faPlayCircle, faLongArrowAltLeft, faSearch)
+library.add(faAngleRight, farStar, faChartBar, faPlayCircle, faLongArrowAltLeft, faSearch, faLongArrowAltUp, faLongArrowAltDown)
 
 Vue.use(BootstrapVue)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

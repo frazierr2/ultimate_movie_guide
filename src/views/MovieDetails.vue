@@ -19,7 +19,16 @@
             <img
               class="movie-image"
               :src="'//image.tmdb.org/t/p/h632/'+ movieDetails[0].backdrop_path"
+              v-if="pictureShown"
+              @click="showTrailer()"
             >
+            <p class="caption" v-if="pictureShown">Click on image to watch trailer</p>
+            <iframe
+              :src="'https://www.youtube.com/embed/' + movieVideos[0].key"
+              frameborder="0"
+              v-if="showTrailerClip"
+              class="trailer-clip"
+            ></iframe>
           </b-col>
           <b-col cols="5">
             <!-- Movie Overview/Details -->
@@ -54,7 +63,7 @@
               </b-col>
             </b-row>
             <!-- Similar Movies -->
-            <b-row no-gutters v-if="moviesSimilar">
+            <b-row no-gutters v-if="moviesSimilar.length">
               <b-col cols="12">
                 <h3 class="medium-heading">Similar Movies</h3>
               </b-col>
@@ -79,13 +88,20 @@ export default {
   name: "MovieDetails",
   data() {
     return {
-      id: this.$route.params.movie.id,
+      id: this.$route.params.movieID,
       baseURL: this.$route.params.baseURL,
       apikey: this.$route.params.apikey,
       movieDetails: [],
       movieVideos: [],
-      moviesSimilar: []
+      moviesSimilar: [],
+      pictureShown: true,
+      showTrailerClip: false
     };
+  },
+  beforeMount() {
+    this.getMovieDetails();
+    this.getMovieVideos();
+    this.getSimilarMovies();
   },
   methods: {
     getMovieDetails() {
@@ -135,12 +151,13 @@ export default {
       this.id = key;
 
       this.getMovieDetails();
+    },
+    showTrailer() {
+      this.showTrailerClip = false;
+
+      this.pictureShown = false;
+      this.showTrailerClip = true;
     }
-  },
-  mounted() {
-    this.getMovieDetails();
-    this.getMovieVideos();
-    this.getSimilarMovies();
   }
 };
 </script>
@@ -178,7 +195,7 @@ export default {
   color: #808b96;
 }
 .movie-image {
-  width: 97%;
+  width: 90%;
   box-shadow: 5px 5px 10px black;
   padding: 7px;
 }
@@ -202,6 +219,16 @@ export default {
 .medium-heading {
   color: #e52313;
   font-size: 22px;
+}
+.trailer-clip {
+  height: 85%;
+  width: 90%;
+  padding: 10px;
+}
+.caption {
+  font-size: 12px;
+  margin-bottom: 0;
+  margin-top: 10px;
 }
 </style>
 

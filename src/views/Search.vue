@@ -41,7 +41,19 @@
               >{{ selectedOption }}</p>
             </b-col>
             <b-col class="sort-button">
-              <p class>Sort</p>
+              <span v-if="orderStatus !== 'Sort'">
+                <font-awesome-icon class="sort-icon" v-if="!orderAscDesc" icon="long-arrow-alt-up"/>
+                <font-awesome-icon
+                  class="sort-icon"
+                  v-if="orderAscDesc"
+                  icon="long-arrow-alt-down"
+                />
+              </span>
+
+              <span
+                @click="sortArrays(orderAscDesc = !orderAscDesc)"
+                style="margin-left:10px"
+              >{{ orderStatus }}</span>
             </b-col>
           </b-row>
 
@@ -51,6 +63,7 @@
                 class="movie-banner-picture"
                 :src="'//image.tmdb.org/t/p/h632/'+ movie.poster_path"
                 @click="getDetails(index)"
+                :infoArray="testArray"
               >
               <p class="text-muted">{{ movie.original_title }}</p>
             </b-col>
@@ -63,6 +76,7 @@
 
 <script>
 import { baseURL, apikey } from "@/assets/key.js";
+import _ from "lodash";
 export default {
   name: "search",
   props: {},
@@ -72,7 +86,10 @@ export default {
       baseURL: baseURL,
       selectedOption: "",
       searchTerm: "",
-      moviesArray: []
+      moviesArray: [],
+      orderAscDesc: false,
+      orderStatus: "Sort",
+      testArray: []
     };
   },
   watch: {
@@ -83,6 +100,8 @@ export default {
       this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Popular Movies";
+      this.orderStatus = "Sort";
+      this.orderAscDesc = false;
       var url = ` 
     ${this.baseURL}movie/popular?api_key=${this.apikey}&language=en-US
      `;
@@ -100,6 +119,8 @@ export default {
       this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Top Rated";
+      this.orderStatus = "Sort";
+      this.orderAscDesc = false;
       var url = ` 
     ${this.baseURL}movie/top_rated?api_key=${this.apikey}&language=en-US
      `;
@@ -117,6 +138,8 @@ export default {
       this.searchTerm = "";
       this.moviesArray = [];
       this.selectedOption = "Now Playing";
+      this.orderStatus = "Sort";
+      this.orderAscDesc = false;
       var url = ` 
     ${this.baseURL}movie/now_playing?api_key=${this.apikey}&language=en-US
      `;
@@ -156,11 +179,23 @@ export default {
       this.$router.push({
         name: "movieDetails",
         params: {
-          movie: movieDetails,
+          movieID: movieDetails.id,
           baseURL: this.baseURL,
           apikey: this.apikey
         }
       });
+    },
+    sortArrays(arrayOrder) {
+      var orderOfArray;
+      if (arrayOrder == true) {
+        this.orderStatus = "A-Z";
+        orderOfArray = _.orderBy(this.moviesArray[0], "title", "asc");
+      } else {
+        orderOfArray = _.orderBy(this.moviesArray[0], "title", "desc");
+        this.orderStatus = "Z-A";
+      }
+      this.moviesArray = [];
+      this.moviesArray.push(orderOfArray);
     }
   },
   mounted() {
@@ -178,7 +213,6 @@ export default {
   padding-left: 30px;
 }
 #movie-list-container {
-  /* border: 1px solid yellow; */
   height: 85vh;
   overflow: scroll;
 }
@@ -190,6 +224,9 @@ export default {
   background-color: rgba(255, 255, 255, 0.7);
   border-right: 1px solid lightgrey;
   padding: 0;
+}
+.sort-icon {
+  color: #cd6155;
 }
 .sort-button {
   text-align: right;
@@ -226,8 +263,8 @@ export default {
   width: 90%;
   height: 300px;
   margin: 5px 0;
-  padding: 0 15px;
-  box-shadow: 4px 4px 10px grey;
+  padding: 5px;
+  box-shadow: 4px 4px 10px #566573;
 }
 .selected-option-text {
   text-align: left;
