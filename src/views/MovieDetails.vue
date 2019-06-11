@@ -230,6 +230,13 @@ export default {
   margin-bottom: 0;
   margin-top: 10px;
 }
+
+/* @media only screen and (max-width: 991px){
+  .movie-banner-picture{
+
+  }
+
+} */
 </style>
 
 

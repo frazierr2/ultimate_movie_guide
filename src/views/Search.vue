@@ -10,7 +10,7 @@
     >
     <b-container id="movie-list-container" class="mt-3" fluid>
       <b-row class="movie-list-container-row">
-        <b-col class="button-column" cols="1">
+        <b-col class="button-column" cols="2" md="1">
           <div class="button-rows">
             <div class="button-row-elements popular-btn" @click="generatePopularMovies()">
               <font-awesome-icon icon="star"/>
@@ -31,7 +31,7 @@
           </div>
         </b-col>
 
-        <b-col class="list-column" cols="11">
+        <b-col class="list-column" cols="10" md="11">
           <b-row>
             <b-col>
               <p
@@ -58,7 +58,7 @@
           </b-row>
 
           <b-row>
-            <b-col v-for="(movie, index) in moviesArray[0]" :key="index" cols="3">
+            <b-col v-for="(movie, index) in moviesArray[0]" :key="index" cols="12" sm="6" md="3">
               <img
                 class="movie-banner-picture"
                 :src="'//image.tmdb.org/t/p/h632/'+ movie.poster_path"
@@ -279,5 +279,34 @@ export default {
 }
 .now-playing-btn:hover .fa-play-circle {
   color: #f1c40f;
+}
+
+/* Responsive Media Queries */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .movie-banner-picture {
+    height: 225px;
+    width: 100%;
+  }
+  .text-muted {
+    font-size: 12px;
+  }
+}
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  .movie-banner-picture {
+    /* height: 225px; */
+    width: 75%;
+  }
+  .text-muted {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .movie-banner-picture {
+    height: 250px;
+    width: 60%;
+  }
+  #searchInput {
+    font-size: 13px;
+  }
 }
 </style>
