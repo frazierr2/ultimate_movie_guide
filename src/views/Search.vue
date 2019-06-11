@@ -1,13 +1,13 @@
 <template>
   <div id="search-container">
+    <font-awesome-icon class="search-icon" icon="search"/>
     <input
       id="searchInput"
       class="mb-2 mr-sm-2 mb-sm-0"
       placeholder="Search Ultimate Movie Guide"
       v-model="searchTerm"
+      v-on:keyup.enter="searchDB()"
     >
-    <button variant="primary" @click="searchDB()">Search</button>
-
     <b-container id="movie-list-container" class="mt-3" fluid>
       <b-row class="movie-list-container-row">
         <b-col class="button-column" cols="1">
@@ -32,7 +32,19 @@
         </b-col>
 
         <b-col class="list-column" cols="11">
-          <p class="selected-option-text" :selectedOption="selectedOption">{{ selectedOption }}</p>
+          <b-row>
+            <b-col>
+              <p
+                class="selected-option-text"
+                :selectedOption="selectedOption"
+                col
+              >{{ selectedOption }}</p>
+            </b-col>
+            <b-col class="sort-button">
+              <p class>Sort</p>
+            </b-col>
+          </b-row>
+
           <b-row>
             <b-col v-for="(movie, index) in moviesArray[0]" :key="index" cols="3">
               <img
@@ -136,10 +148,6 @@ export default {
         .then(jsonData => {
           this.moviesArray.push(jsonData.results);
         });
-
-      if (this.searchTerm.length == 0) {
-        alert("empty");
-      }
     },
     // Gets object by index and passes to detail view to display more data
     getDetails(index) {
@@ -167,6 +175,7 @@ export default {
 }
 #searchInput {
   width: 50%;
+  padding-left: 30px;
 }
 #movie-list-container {
   /* border: 1px solid yellow; */
@@ -178,14 +187,25 @@ export default {
 }
 .button-column {
   /* background: red; */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
   border-right: 1px solid lightgrey;
   padding: 0;
 }
+.sort-button {
+  text-align: right;
+  top: 10px;
+  right: 20px;
+}
 .list-column {
   /* background: white; */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
 }
+.search-icon {
+  left: 23px;
+  position: relative;
+  color: lightgrey;
+}
+
 .button-rows {
   height: 100px;
   position: relative;
@@ -215,12 +235,12 @@ export default {
 }
 
 .popular-btn:hover .fa-star {
-  color: gold;
+  color: #f1c40f;
 }
 .top-rated-btn:hover .fa-chart-bar {
-  color: gold;
+  color: #f1c40f;
 }
 .now-playing-btn:hover .fa-play-circle {
-  color: gold;
+  color: #f1c40f;
 }
 </style>

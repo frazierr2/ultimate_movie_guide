@@ -2,9 +2,17 @@
   <div>
     <b-container id="detail-container" fluid>
       <div class="movie-detail-container">
-        <b-row>
-          <b-col class="movie-title" cols="12">{{ movieDetails[0].title }}</b-col>
-          <b-col class="movie-tagline" cols="12">{{ movieDetails[0].tagline }}</b-col>
+        <b-row no-gutters>
+          <b-col cols="1" style="margin:auto;">
+            <router-link class="back-link" to="/search">
+              <font-awesome-icon class="back-arrow" icon="long-arrow-alt-left"/>
+              <span class="back">BACK</span>
+            </router-link>
+          </b-col>
+          <b-col cols="11">
+            <b-col class="movie-title" cols="12">{{ movieDetails[0].title }}</b-col>
+            <b-col class="movie-tagline" cols="12">{{ movieDetails[0].tagline }}</b-col>
+          </b-col>
         </b-row>
         <b-row>
           <b-col cols="7">
@@ -26,7 +34,11 @@
               </b-col>
               <b-col cols="12" style="margin-bottom:10px;">
                 <b-row no-gutters>
-                  <b-col v-for="genre in movieDetails[0].genres" :key="genre.id">{{ genre.name }}</b-col>
+                  <b-col
+                    class="small-text"
+                    v-for="genre in movieDetails[0].genres"
+                    :key="genre.id"
+                  >{{ genre.name }}</b-col>
                 </b-row>
               </b-col>
             </b-row>
@@ -42,7 +54,7 @@
               </b-col>
             </b-row>
             <!-- Similar Movies -->
-            <b-row no-gutters>
+            <b-row no-gutters v-if="moviesSimilar">
               <b-col cols="12">
                 <h3 class="medium-heading">Similar Movies</h3>
               </b-col>
@@ -133,22 +145,35 @@ export default {
 };
 </script>
 
-
 <style scoped>
 #detail-container {
   margin-top: 25px;
   padding: 0 15px;
 }
+.back-arrow {
+  font-size: 20px;
+}
+.back {
+  margin-left: 10px;
+  font-size: 10px;
+}
+.back-link {
+  text-decoration: none;
+  color: black;
+}
+.back-link:hover {
+  color: #5d6d7e;
+}
 .movie-detail-container {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.7);
   height: 85vh;
 }
 .movie-title {
-  font-size: 50px;
+  font-size: 45px;
   color: #5499c7;
 }
 .movie-tagline {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 15px;
   color: #808b96;
 }
@@ -158,10 +183,10 @@ export default {
   padding: 7px;
 }
 .overview-container {
-  padding: 0 20px 10px 20px;
+  padding: 0 15px 5px 15px;
 }
 .overview-container p {
-  font-size: 15px;
+  font-size: 14px;
 }
 .overview-container h3 {
   color: #04d277;
@@ -179,3 +204,5 @@ export default {
   font-size: 22px;
 }
 </style>
+
+

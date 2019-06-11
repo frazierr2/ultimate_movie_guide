@@ -7,10 +7,12 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { faStar as farStar } from '@fortawesome/free-solid-svg-icons'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 
-library.add(faAngleRight, farStar, faChartBar, faPlayCircle)
+library.add(faAngleRight, farStar, faChartBar, faPlayCircle, faLongArrowAltLeft, faSearch)
 
 Vue.use(BootstrapVue)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
