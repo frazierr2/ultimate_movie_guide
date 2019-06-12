@@ -52,7 +52,7 @@
 
               <span
                 @click="sortArrays(orderAscDesc = !orderAscDesc)"
-                style="margin-left:10px"
+                class="button-for-sort"
               >{{ orderStatus }}</span>
             </b-col>
           </b-row>
@@ -230,6 +230,14 @@ export default {
   text-align: right;
   top: 10px;
   right: 20px;
+}
+.button-for-sort {
+  margin-left: 10px;
+  border: 1px solid #808b96;
+  background-color: #808b96;
+  border-radius: 4px;
+  padding: 4px 10px;
+  color: white;
 }
 .list-column {
   /* background: white; */
