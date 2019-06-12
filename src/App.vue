@@ -31,13 +31,14 @@ html {
     ),
     url("https://cdn.pixabay.com/photo/2018/10/26/11/14/tv-3774381_960_720.jpg");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100% 100%;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background-color: black;
   height: 100vh;
+  position: relative;
 }
 #nav {
   padding: 30px;

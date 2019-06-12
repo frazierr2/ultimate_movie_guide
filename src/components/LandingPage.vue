@@ -29,6 +29,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.hello {
+  top: 25%;
+  position: absolute;
+  left: 25%;
+}
 #app-name {
   font-family: "Bangers", cursive;
   font-size: 100px;
@@ -57,5 +62,41 @@ export default {
 #search-caret {
   padding-left: 20px;
   transform: rotate(45deg);
+}
+
+/* Responsive Media Queries */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  #app-name {
+    font-size: 73px;
+  }
+  #caption-one {
+    font-size: 50px;
+  }
+  #caption-two {
+    font-size: 25px;
+  }
+  .hello {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-18%, -50%);
+  }
+}
+@media only screen and (max-width: 767px) {
+  #app-name {
+    font-size: 54px;
+  }
+  #caption-one {
+    font-size: 40px;
+  }
+  #caption-two {
+    font-size: 20px;
+  }
+  .hello {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 </style>

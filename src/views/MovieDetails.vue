@@ -3,19 +3,19 @@
     <b-container id="detail-container" fluid>
       <div class="movie-detail-container">
         <b-row no-gutters>
-          <b-col cols="1" style="margin:auto;">
+          <b-col cols="2" md="1" style="margin:auto;">
             <router-link class="back-link" to="/search">
               <font-awesome-icon class="back-arrow" icon="long-arrow-alt-left"/>
               <span class="back">BACK</span>
             </router-link>
           </b-col>
-          <b-col cols="11">
+          <b-col cols="10" md="11">
             <b-col class="movie-title" cols="12">{{ movieDetails[0].title }}</b-col>
             <b-col class="movie-tagline" cols="12">{{ movieDetails[0].tagline }}</b-col>
           </b-col>
         </b-row>
         <b-row>
-          <b-col cols="7">
+          <b-col cols="12" lg="7">
             <img
               class="movie-image"
               :src="'//image.tmdb.org/t/p/h632/'+ movieDetails[0].backdrop_path"
@@ -30,7 +30,7 @@
               class="trailer-clip"
             ></iframe>
           </b-col>
-          <b-col cols="5">
+          <b-col cols="12" lg="5">
             <!-- Movie Overview/Details -->
             <div class="overview-container">
               <h3>Movie Overview</h3>
@@ -148,9 +148,13 @@ export default {
     },
     getNewMovie(key) {
       this.movieDetails = [];
+      this.movieVideos = [];
+      this.showTrailerClip = false;
+      this.pictureShown = true;
       this.id = key;
 
       this.getMovieDetails();
+      this.getMovieVideos();
     },
     showTrailer() {
       this.showTrailerClip = false;
@@ -184,6 +188,7 @@ export default {
 .movie-detail-container {
   background-color: rgba(255, 255, 255, 0.7);
   height: 85vh;
+  overflow: scroll;
 }
 .movie-title {
   font-size: 45px;
@@ -231,12 +236,45 @@ export default {
   margin-top: 10px;
 }
 
-/* @media only screen and (max-width: 991px){
-  .movie-banner-picture{
-
+/* Responsive Media Queries */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .trailer-clip {
+    height: 500px;
   }
-
-} */
+  .overview-container {
+    margin-top: 20px;
+  }
+}
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  .trailer-clip {
+    height: 300px;
+  }
+  .overview-container {
+    margin-top: 20px;
+  }
+  .movie-title {
+    font-size: 35px;
+  }
+  .movie-tagline {
+    font-size: 12px;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .trailer-clip {
+    height: 300px;
+    width: 100%;
+  }
+  .movie-title {
+    font-size: 35px;
+  }
+  .movie-tagline {
+    font-size: 12px;
+  }
+  .overview-container p,
+  .small-text {
+    font-size: 12px;
+  }
+}
 </style>
 
 
