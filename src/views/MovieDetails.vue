@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container id="detail-container" fluid>
+    <b-container id="detail-container" fluid v-if="is_data_fetched">
       <div class="movie-detail-container">
         <b-row no-gutters>
           <b-col cols="2" md="1" style="margin:auto;">
@@ -95,8 +95,12 @@ export default {
       movieVideos: "",
       moviesSimilar: [],
       pictureShown: true,
-      showTrailerClip: false
+      showTrailerClip: false,
+      is_data_fetched: false
     };
+  },
+  watch: {
+    movieDetails() {}
   },
   beforeMount() {
     this.getMovieDetails();
@@ -105,6 +109,7 @@ export default {
   },
   methods: {
     getMovieDetails() {
+      this.is_data_fetched = false;
       var url = `${this.baseURL}movie/${this.id}?api_key=${this.apikey}`;
       fetch(url, {
         method: "get"
@@ -114,6 +119,7 @@ export default {
         })
         .then(jsonData => {
           this.movieDetails.push(jsonData);
+          this.is_data_fetched = true;
         });
     },
     getMovieVideos() {
@@ -126,7 +132,6 @@ export default {
         })
         .then(jsonData => {
           this.movieVideos = jsonData.results[0].key;
-          // this.movieVideos.push(jsonData.results[0]);
         });
     },
     getSimilarMovies() {
@@ -140,7 +145,6 @@ export default {
           return response.json();
         })
         .then(jsonData => {
-          console.log(jsonData.results.length);
           if (jsonData.results.length) {
             this.moviesSimilar.push(jsonData.results.slice(0, 4));
           }
@@ -151,6 +155,7 @@ export default {
       this.movieVideos = [];
       this.showTrailerClip = false;
       this.pictureShown = true;
+
       this.id = key;
 
       this.getMovieDetails();

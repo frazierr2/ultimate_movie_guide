@@ -63,7 +63,6 @@
                 class="movie-banner-picture"
                 :src="'//image.tmdb.org/t/p/h632/'+ movie.poster_path"
                 @click="getDetails(index)"
-                :infoArray="testArray"
               >
               <p class="text-muted">{{ movie.original_title }}</p>
             </b-col>
@@ -88,8 +87,7 @@ export default {
       searchTerm: "",
       moviesArray: [],
       orderAscDesc: false,
-      orderStatus: "Sort",
-      testArray: []
+      orderStatus: "Sort"
     };
   },
   watch: {
