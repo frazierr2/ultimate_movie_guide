@@ -24,7 +24,7 @@
             >
             <p class="caption" v-if="pictureShown">Click on image to watch trailer</p>
             <iframe
-              :src="'https://www.youtube.com/embed/' + movieVideos[0].key"
+              :src="'https://www.youtube.com/embed/' + movieVideos"
               frameborder="0"
               v-if="showTrailerClip"
               class="trailer-clip"
@@ -68,8 +68,8 @@
                 <h3 class="medium-heading">Similar Movies</h3>
               </b-col>
               <b-col
-                v-for="similar in moviesSimilar"
-                :key="similar.id"
+                v-for="(similar, index) in moviesSimilar[0]"
+                :key="index"
                 @click="getNewMovie(similar.id)"
               >
                 <img :src="'//image.tmdb.org/t/p/w92/'+ similar.poster_path" alt>
@@ -92,7 +92,7 @@ export default {
       baseURL: this.$route.params.baseURL,
       apikey: this.$route.params.apikey,
       movieDetails: [],
-      movieVideos: [],
+      movieVideos: "",
       moviesSimilar: [],
       pictureShown: true,
       showTrailerClip: false
@@ -125,7 +125,8 @@ export default {
           return response.json();
         })
         .then(jsonData => {
-          this.movieVideos.push(jsonData.results[0]);
+          this.movieVideos = jsonData.results[0].key;
+          // this.movieVideos.push(jsonData.results[0]);
         });
     },
     getSimilarMovies() {
@@ -139,11 +140,10 @@ export default {
           return response.json();
         })
         .then(jsonData => {
-          this.moviesSimilar.push(
-            jsonData.results[0],
-            jsonData.results[1],
-            jsonData.results[2]
-          );
+          console.log(jsonData.results.length);
+          if (jsonData.results.length) {
+            this.moviesSimilar.push(jsonData.results.slice(0, 4));
+          }
         });
     },
     getNewMovie(key) {
