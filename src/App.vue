@@ -2,14 +2,6 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link>
-
-      <!-- <input
-        id="searchInput"
-        class="mb-2 mr-sm-2 mb-sm-0"
-        placeholder="Search Ultimate Movie Guide"
-        v-model="searchTerm"
-        v-if="this.$route.path == '/search'"
-      >-->
     </div>
     <router-view/>
   </div>

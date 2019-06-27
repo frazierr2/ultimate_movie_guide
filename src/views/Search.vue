@@ -12,22 +12,34 @@
       <b-row class="movie-list-container-row">
         <b-col class="button-column" cols="2" md="1">
           <div class="button-rows">
-            <div class="button-row-elements popular-btn" @click="generatePopularMovies()">
+            <object
+              class="button-row-elements popular-btn"
+              @click="generateMovieList('popular')"
+              name="popular"
+            >
               <font-awesome-icon icon="star"/>
               <p>Popular</p>
-            </div>
+            </object>
           </div>
           <div class="button-rows">
-            <div class="button-row-elements top-rated-btn" @click="generateTopRated()">
+            <object
+              id="top_rated"
+              class="button-row-elements top-rated-btn"
+              @click="generateMovieList('top_rated')"
+            >
               <font-awesome-icon icon="chart-bar"/>
               <p>Top Rated</p>
-            </div>
+            </object>
           </div>
           <div class="button-rows">
-            <div class="button-row-elements now-playing-btn" @click="generateNowPlaying()">
+            <object
+              class="button-row-elements now-playing-btn"
+              @click="generateMovieList('now_playing')"
+              name="now_playing"
+            >
               <font-awesome-icon icon="play-circle"/>
               <p>Now Playing</p>
-            </div>
+            </object>
           </div>
         </b-col>
 
@@ -94,53 +106,30 @@ export default {
     moviesArray() {}
   },
   methods: {
-    generatePopularMovies() {
+    generateMovieList(passedEndpoint) {
+      var endpointName;
       this.searchTerm = "";
       this.moviesArray = [];
-      this.selectedOption = "Popular Movies";
       this.orderStatus = "Sort";
       this.orderAscDesc = false;
-      var url = ` 
-    ${this.baseURL}movie/popular?api_key=${this.apikey}&language=en-US
-     `;
-      fetch(url, {
-        method: "get"
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(jsonData => {
-          this.moviesArray.push(jsonData.results);
-        });
-    },
-    generateTopRated() {
-      this.searchTerm = "";
-      this.moviesArray = [];
-      this.selectedOption = "Top Rated";
-      this.orderStatus = "Sort";
-      this.orderAscDesc = false;
-      var url = ` 
-    ${this.baseURL}movie/top_rated?api_key=${this.apikey}&language=en-US
-     `;
-      fetch(url, {
-        method: "get"
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(jsonData => {
-          this.moviesArray.push(jsonData.results);
-        });
-    },
-    generateNowPlaying() {
-      this.searchTerm = "";
-      this.moviesArray = [];
-      this.selectedOption = "Now Playing";
-      this.orderStatus = "Sort";
-      this.orderAscDesc = false;
-      var url = ` 
-    ${this.baseURL}movie/now_playing?api_key=${this.apikey}&language=en-US
-     `;
+      // Capturing what name gets passed into function
+      if (passedEndpoint == "popular") {
+        endpointName = passedEndpoint;
+        this.selectedOption = "Popular Movies";
+      } else if (passedEndpoint == "top_rated") {
+        endpointName = passedEndpoint;
+        this.selectedOption = "Top Rated";
+      } else {
+        endpointName = passedEndpoint;
+        this.selectedOption = "Now Playing";
+      }
+
+      var url = `
+        ${this.baseURL}movie/${endpointName}?api_key=${
+        this.apikey
+      }&language=en-US
+        `;
+
       fetch(url, {
         method: "get"
       })
@@ -197,7 +186,7 @@ export default {
     }
   },
   mounted() {
-    this.generatePopularMovies();
+    this.generateMovieList("popular");
   }
 };
 </script>
