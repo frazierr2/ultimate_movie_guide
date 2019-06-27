@@ -123,13 +123,13 @@ export default {
         endpointName = passedEndpoint;
         this.selectedOption = "Now Playing";
       }
-
+      // Generating URL
       var url = `
         ${this.baseURL}movie/${endpointName}?api_key=${
         this.apikey
       }&language=en-US
         `;
-
+      // Fetching Data from The Movie DB and adding to moviesArray
       fetch(url, {
         method: "get"
       })
