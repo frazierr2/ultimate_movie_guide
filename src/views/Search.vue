@@ -1,13 +1,14 @@
 <template>
   <div id="search-container">
-    <font-awesome-icon class="search-icon" icon="search"/>
+    <font-awesome-icon class="search-icon" icon="search" />
     <input
       id="searchInput"
       class="mb-2 mr-sm-2 mb-sm-0"
       placeholder="Search Ultimate Movie Guide"
       v-model="searchTerm"
-      v-on:keyup.enter="searchDB()"
-    >
+      @input="searchDB"
+    />
+
     <b-container id="movie-list-container" class="mt-3" fluid>
       <b-row class="movie-list-container-row">
         <b-col class="button-column" cols="2" md="1">
@@ -17,7 +18,7 @@
               @click="generateMovieList('popular')"
               name="popular"
             >
-              <font-awesome-icon icon="star"/>
+              <font-awesome-icon icon="star" />
               <p>Popular</p>
             </object>
           </div>
@@ -27,7 +28,7 @@
               class="button-row-elements top-rated-btn"
               @click="generateMovieList('top_rated')"
             >
-              <font-awesome-icon icon="chart-bar"/>
+              <font-awesome-icon icon="chart-bar" />
               <p>Top Rated</p>
             </object>
           </div>
@@ -37,7 +38,7 @@
               @click="generateMovieList('now_playing')"
               name="now_playing"
             >
-              <font-awesome-icon icon="play-circle"/>
+              <font-awesome-icon icon="play-circle" />
               <p>Now Playing</p>
             </object>
           </div>
@@ -54,7 +55,7 @@
             </b-col>
             <b-col class="sort-button">
               <span v-if="orderStatus !== 'Sort'">
-                <font-awesome-icon class="sort-icon" v-if="!orderAscDesc" icon="long-arrow-alt-up"/>
+                <font-awesome-icon class="sort-icon" v-if="!orderAscDesc" icon="long-arrow-alt-up" />
                 <font-awesome-icon
                   class="sort-icon"
                   v-if="orderAscDesc"
@@ -75,7 +76,7 @@
                 class="movie-banner-picture"
                 :src="'//image.tmdb.org/t/p/h632/'+ movie.poster_path"
                 @click="getDetails(index)"
-              >
+              />
               <p class="text-muted">{{ movie.original_title }}</p>
             </b-col>
           </b-row>
@@ -88,6 +89,7 @@
 <script>
 import { baseURL, apikey } from "@/assets/key.js";
 import _ from "lodash";
+import { setTimeout } from "timers";
 export default {
   name: "search",
   props: {},
@@ -106,6 +108,17 @@ export default {
     moviesArray() {}
   },
   methods: {
+    ajaxCall(url) {
+      fetch(url, {
+        method: "get"
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(jsonData => {
+          this.moviesArray.push(jsonData.results);
+        });
+    },
     generateMovieList(passedEndpoint) {
       var endpointName;
       this.searchTerm = "";
@@ -125,39 +138,25 @@ export default {
       }
       // Generating URL
       var url = `
-        ${this.baseURL}movie/${endpointName}?api_key=${
-        this.apikey
-      }&language=en-US
+        ${this.baseURL}movie/${endpointName}?api_key=${this.apikey}&language=en-US
         `;
-      // Fetching Data from The Movie DB and adding to moviesArray
-      fetch(url, {
-        method: "get"
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(jsonData => {
-          this.moviesArray.push(jsonData.results);
-        });
+
+      this.ajaxCall(url);
     },
     searchDB() {
       this.moviesArray = [];
       this.selectedOption = this.searchTerm;
 
-      var encodedTerm = encodeURI(this.searchTerm),
-        url = `${this.baseURL}search/movie?api_key=${
-          this.apikey
-        }&query=${encodedTerm}`;
+      setTimeout(() => {
+        var encodedTerm = encodeURI(this.searchTerm),
+          url = `${this.baseURL}search/movie?api_key=${this.apikey}&query=${encodedTerm}`;
 
-      fetch(url, {
-        method: "get"
-      })
-        .then(response => {
-          return response.json();
-        })
-        .then(jsonData => {
-          this.moviesArray.push(jsonData.results);
-        });
+        if (this.searchTerm.length) {
+          this.ajaxCall(url);
+        } else {
+          this.generateMovieList("popular");
+        }
+      }, 2000);
     },
     // Gets object by index and passes to detail view to display more data
     getDetails(index) {
