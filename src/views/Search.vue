@@ -70,7 +70,14 @@
             </b-col>
           </b-row>
 
-          <b-row>
+          <b-row v-if="loading">
+            <div id="loading-wrapper">
+              <div id="loading-text">LOADING...</div>
+              <div id="loading-content"></div>
+            </div>
+          </b-row>
+
+          <b-row v-if="moviesReturned" name="fade" is="transition-group">
             <b-col v-for="(movie, index) in moviesArray[0]" :key="index" cols="12" sm="6" md="3">
               <img
                 class="movie-banner-picture"
@@ -101,7 +108,9 @@ export default {
       searchTerm: "",
       moviesArray: [],
       orderAscDesc: false,
-      orderStatus: "Sort"
+      orderStatus: "Sort",
+      loading: false,
+      moviesReturned: true
     };
   },
   watch: {
@@ -113,10 +122,13 @@ export default {
         method: "get"
       })
         .then(response => {
+          this.moviesReturned = true;
           return response.json();
         })
         .then(jsonData => {
           this.moviesArray.push(jsonData.results);
+          this.loading = false;
+          // this.moviesReturned = true;
         });
     },
     generateMovieList(passedEndpoint) {
@@ -125,6 +137,7 @@ export default {
       this.moviesArray = [];
       this.orderStatus = "Sort";
       this.orderAscDesc = false;
+      this.moviesReturned = true;
       // Capturing what name gets passed into function
       if (passedEndpoint == "popular") {
         endpointName = passedEndpoint;
@@ -146,6 +159,10 @@ export default {
     searchDB() {
       this.moviesArray = [];
       this.selectedOption = this.searchTerm;
+      this.moviesReturned = false;
+      setTimeout(() => {
+        this.loading = true;
+      }, 500);
 
       setTimeout(() => {
         var encodedTerm = encodeURI(this.searchTerm),
@@ -273,6 +290,117 @@ export default {
 }
 .now-playing-btn:hover .fa-play-circle {
   color: #f1c40f;
+}
+
+/* ==================================================== */
+/* ================== Loading Styles ================== */
+/* ==================================================== */
+#loading-wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+#loading-text {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #999;
+  width: 100px;
+  height: 30px;
+  margin: -7px 0 0 -45px;
+  text-align: center;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-size: 20px;
+}
+
+#loading-content {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 170px;
+  height: 170px;
+  margin: -85px 0 0 -85px;
+  border: 3px solid #f00;
+}
+
+#loading-content:after {
+  content: "";
+  position: absolute;
+  border: 3px solid #0f0;
+  left: 15px;
+  right: 15px;
+  top: 15px;
+  bottom: 15px;
+}
+
+#loading-content:before {
+  content: "";
+  position: absolute;
+  border: 3px solid #00f;
+  left: 5px;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+}
+
+#loading-content {
+  border: 3px solid transparent;
+  border-top-color: #4d658d;
+  border-bottom-color: #4d658d;
+  border-radius: 50%;
+  -webkit-animation: loader 2s linear infinite;
+  -moz-animation: loader 2s linear infinite;
+  -o-animation: loader 2s linear infinite;
+  animation: loader 2s linear infinite;
+}
+
+#loading-content:before {
+  border: 3px solid transparent;
+  border-top-color: #d4cc6a;
+  border-bottom-color: #d4cc6a;
+  border-radius: 50%;
+  -webkit-animation: loader 3s linear infinite;
+  -moz-animation: loader 2s linear infinite;
+  -o-animation: loader 2s linear infinite;
+  animation: loader 3s linear infinite;
+}
+
+#loading-content:after {
+  border: 3px solid transparent;
+  border-top-color: #84417c;
+  border-bottom-color: #84417c;
+  border-radius: 50%;
+  -webkit-animation: loader 1.5s linear infinite;
+  animation: loader 1.5s linear infinite;
+  -moz-animation: loader 2s linear infinite;
+  -o-animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* Transition for fade in and out of page views */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Responsive Media Queries */
