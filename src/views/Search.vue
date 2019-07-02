@@ -15,7 +15,7 @@
           <div class="button-rows">
             <object
               class="button-row-elements popular-btn"
-              @click="generateMovieList('popular')"
+              @click="generateMovieList('popular', 1)"
               name="popular"
             >
               <font-awesome-icon icon="star" />
@@ -26,7 +26,8 @@
             <object
               id="top_rated"
               class="button-row-elements top-rated-btn"
-              @click="generateMovieList('top_rated')"
+              @click="generateMovieList('top_rated', 1)"
+              name="top_rated"
             >
               <font-awesome-icon icon="chart-bar" />
               <p>Top Rated</p>
@@ -35,7 +36,7 @@
           <div class="button-rows">
             <object
               class="button-row-elements now-playing-btn"
-              @click="generateMovieList('now_playing')"
+              @click="generateMovieList('now_playing', 1)"
               name="now_playing"
             >
               <font-awesome-icon icon="play-circle" />
@@ -90,8 +91,18 @@
         </b-col>
       </b-row>
     </b-container>
+    <div id="pagination-container">
+      <b-button
+        v-for="pageNumber in pageNumbers"
+        :key="pageNumber"
+        :value="pageNumber"
+        squared
+        @click="generateMovieList(endpoint, pageNumber)"
+      >{{ pageNumber }}</b-button>
+    </div>
   </div>
 </template>
+
 
 <script>
 import { baseURL, apikey } from "@/assets/key.js";
@@ -106,11 +117,13 @@ export default {
       baseURL: baseURL,
       selectedOption: "",
       searchTerm: "",
+      endpoint: "",
       moviesArray: [],
       orderAscDesc: false,
       orderStatus: "Sort",
       loading: false,
-      moviesReturned: true
+      moviesReturned: true,
+      pageNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     };
   },
   watch: {
@@ -131,7 +144,7 @@ export default {
           // this.moviesReturned = true;
         });
     },
-    generateMovieList(passedEndpoint) {
+    generateMovieList(passedEndpoint, pageNumber) {
       var endpointName;
       this.searchTerm = "";
       this.moviesArray = [];
@@ -145,13 +158,16 @@ export default {
       } else if (passedEndpoint == "top_rated") {
         endpointName = passedEndpoint;
         this.selectedOption = "Top Rated";
+        // this.endpoint = endpointName;
       } else {
         endpointName = passedEndpoint;
         this.selectedOption = "Now Playing";
       }
+      // Setting endpoint value to be used on pagination
+      this.endpoint = endpointName;
       // Generating URL
       var url = `
-        ${this.baseURL}movie/${endpointName}?api_key=${this.apikey}&language=en-US
+        ${this.baseURL}movie/${endpointName}?api_key=${this.apikey}&language=en-US&page=${pageNumber}
         `;
 
       this.ajaxCall(url);
@@ -171,7 +187,7 @@ export default {
         if (this.searchTerm.length) {
           this.ajaxCall(url);
         } else {
-          this.generateMovieList("popular");
+          this.generateMovieList("popular", 1);
         }
       }, 2000);
     },
@@ -202,10 +218,12 @@ export default {
     }
   },
   mounted() {
-    this.generateMovieList("popular");
+    this.generateMovieList("popular", 1);
   }
 };
 </script>
+
+
 
 <style scoped>
 #search-container {
@@ -216,7 +234,8 @@ export default {
   padding-left: 30px;
 }
 #movie-list-container {
-  height: 85vh;
+  /* height: 85vh; */
+  height: 79vh;
   overflow: scroll;
 }
 .movie-list-container-row {
@@ -290,6 +309,16 @@ export default {
 }
 .now-playing-btn:hover .fa-play-circle {
   color: #f1c40f;
+}
+
+#pagination-container {
+  /* background-color: white; */
+  margin-top: 5px;
+  padding: 3px 0;
+}
+#pagination-container button {
+  background: white;
+  color: darkgrey;
 }
 
 /* ==================================================== */
