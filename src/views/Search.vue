@@ -6,7 +6,13 @@
       class="mb-2 mr-sm-2 mb-sm-0"
       placeholder="Search Ultimate Movie Guide"
       v-model="searchTerm"
-      @input="searchDB"
+      @keydown.enter="searchDB"
+    />
+    <font-awesome-icon
+      v-if="searchTerm.length"
+      class="clear-icon"
+      icon="times-circle"
+      @click="paginationFunction('popular', 1)"
     />
 
     <b-container id="movie-list-container" class="mt-3" fluid>
@@ -15,7 +21,7 @@
           <div class="button-rows">
             <object
               class="button-row-elements popular-btn"
-              @click="generateMovieList('popular', 1)"
+              @click="paginationFunction('popular', 1)"
               name="popular"
             >
               <font-awesome-icon icon="star" />
@@ -26,7 +32,7 @@
             <object
               id="top_rated"
               class="button-row-elements top-rated-btn"
-              @click="generateMovieList('top_rated', 1)"
+              @click="paginationFunction('top_rated', 1)"
               name="top_rated"
             >
               <font-awesome-icon icon="chart-bar" />
@@ -36,7 +42,7 @@
           <div class="button-rows">
             <object
               class="button-row-elements now-playing-btn"
-              @click="generateMovieList('now_playing', 1)"
+              @click="paginationFunction('now_playing', 1)"
               name="now_playing"
             >
               <font-awesome-icon icon="play-circle" />
@@ -97,12 +103,14 @@
         :key="pageNumber"
         :value="pageNumber"
         squared
-        @click="generateMovieList(endpoint, pageNumber)"
+        @click="paginationFunction(endpoint, pageNumber)"
+        :class="{current:pageNumber == current}"
       >{{ pageNumber }}</b-button>
     </div>
   </div>
 </template>
 
+// @click="generateMovieList(endpoint, pageNumber); current = pageNumber"
 
 <script>
 import { baseURL, apikey } from "@/assets/key.js";
@@ -123,9 +131,11 @@ export default {
       orderStatus: "Sort",
       loading: false,
       moviesReturned: true,
-      pageNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      pageNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      current: 1
     };
   },
+  //Watch for changes to movies array and rerender page
   watch: {
     moviesArray() {}
   },
@@ -158,7 +168,6 @@ export default {
       } else if (passedEndpoint == "top_rated") {
         endpointName = passedEndpoint;
         this.selectedOption = "Top Rated";
-        // this.endpoint = endpointName;
       } else {
         endpointName = passedEndpoint;
         this.selectedOption = "Now Playing";
@@ -176,13 +185,14 @@ export default {
       this.moviesArray = [];
       this.selectedOption = this.searchTerm;
       this.moviesReturned = false;
+      this.endpoint = "search";
       setTimeout(() => {
         this.loading = true;
       }, 500);
 
       setTimeout(() => {
         var encodedTerm = encodeURI(this.searchTerm),
-          url = `${this.baseURL}search/movie?api_key=${this.apikey}&query=${encodedTerm}`;
+          url = `${this.baseURL}${this.endpoint}/movie?api_key=${this.apikey}&query=${encodedTerm}`;
 
         if (this.searchTerm.length) {
           this.ajaxCall(url);
@@ -190,6 +200,10 @@ export default {
           this.generateMovieList("popular", 1);
         }
       }, 2000);
+    },
+    paginationFunction(endpoint, pageNumber) {
+      this.generateMovieList(endpoint, pageNumber);
+      this.current = pageNumber;
     },
     // Gets object by index and passes to detail view to display more data
     getDetails(index) {
@@ -218,7 +232,7 @@ export default {
     }
   },
   mounted() {
-    this.generateMovieList("popular", 1);
+    this.paginationFunction("popular", 1);
   }
 };
 </script>
@@ -272,6 +286,11 @@ export default {
   position: relative;
   color: lightgrey;
 }
+.clear-icon {
+  position: relative;
+  right: 33px;
+  color: #b31b1e;
+}
 
 .button-rows {
   height: 100px;
@@ -321,6 +340,10 @@ export default {
   color: darkgrey;
 }
 
+.current {
+  background-color: rgb(56, 184, 131) !important;
+  color: white !important;
+}
 /* ==================================================== */
 /* ================== Loading Styles ================== */
 /* ==================================================== */

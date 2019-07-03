@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <transition name="fade">
     <b-container id="detail-container" fluid v-if="is_data_fetched">
       <div class="movie-detail-container">
         <b-row no-gutters>
           <b-col cols="2" md="1" style="margin:auto;">
             <router-link class="back-link" to="/search">
-              <font-awesome-icon class="back-arrow" icon="long-arrow-alt-left"/>
+              <font-awesome-icon class="back-arrow" icon="long-arrow-alt-left" />
               <span class="back">BACK</span>
             </router-link>
           </b-col>
@@ -21,7 +21,7 @@
               :src="'//image.tmdb.org/t/p/h632/'+ movieDetails[0].backdrop_path"
               v-if="pictureShown"
               @click="showTrailer()"
-            >
+            />
             <p class="caption" v-if="pictureShown">Click on image to watch trailer</p>
             <iframe
               :src="'https://www.youtube.com/embed/' + movieVideos"
@@ -72,7 +72,7 @@
                 :key="index"
                 @click="getNewMovie(similar.id)"
               >
-                <img :src="'//image.tmdb.org/t/p/w92/'+ similar.poster_path" alt>
+                <img :src="'//image.tmdb.org/t/p/w92/'+ similar.poster_path" alt />
                 <p class="small-text">{{ similar.title }}</p>
               </b-col>
             </b-row>
@@ -80,7 +80,7 @@
         </b-row>
       </div>
     </b-container>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -135,9 +135,7 @@ export default {
         });
     },
     getSimilarMovies() {
-      var url = `${this.baseURL}movie/${this.id}/similar?api_key=${
-        this.apikey
-      }`;
+      var url = `${this.baseURL}movie/${this.id}/similar?api_key=${this.apikey}`;
       fetch(url, {
         method: "get"
       })
@@ -239,6 +237,16 @@ export default {
   font-size: 12px;
   margin-bottom: 0;
   margin-top: 10px;
+}
+
+/* Transition for fade in and out of page views */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 /* Responsive Media Queries */
