@@ -91,6 +91,8 @@ export default {
       id: this.$route.params.movieID,
       baseURL: this.$route.params.baseURL,
       apikey: this.$route.params.apikey,
+      endpoint: this.$route.params.endpoint,
+      current: this.$route.params.current,
       movieDetails: [],
       movieVideos: "",
       moviesSimilar: [],

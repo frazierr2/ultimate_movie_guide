@@ -24,7 +24,7 @@
               @click="paginationFunction('popular', 1)"
               name="popular"
             >
-              <font-awesome-icon icon="star" />
+              <font-awesome-icon :class="{currentSearch:'popular' == currentSearch}" icon="star" />
               <p>Popular</p>
             </object>
           </div>
@@ -35,7 +35,10 @@
               @click="paginationFunction('top_rated', 1)"
               name="top_rated"
             >
-              <font-awesome-icon icon="chart-bar" />
+              <font-awesome-icon
+                :class="{currentSearch:'top_rated' == currentSearch}"
+                icon="chart-bar"
+              />
               <p>Top Rated</p>
             </object>
           </div>
@@ -45,7 +48,10 @@
               @click="paginationFunction('now_playing', 1)"
               name="now_playing"
             >
-              <font-awesome-icon icon="play-circle" />
+              <font-awesome-icon
+                :class="{currentSearch:'now_playing' == currentSearch}"
+                icon="play-circle"
+              />
               <p>Now Playing</p>
             </object>
           </div>
@@ -125,14 +131,15 @@ export default {
       baseURL: baseURL,
       selectedOption: "",
       searchTerm: "",
-      endpoint: "",
+      endpoint: "popular",
       moviesArray: [],
       orderAscDesc: false,
       orderStatus: "Sort",
       loading: false,
       moviesReturned: true,
       pageNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      current: 1
+      current: 1,
+      currentSearch: ""
     };
   },
   //Watch for changes to movies array and rerender page
@@ -161,6 +168,7 @@ export default {
       this.orderStatus = "Sort";
       this.orderAscDesc = false;
       this.moviesReturned = true;
+      this.currentSearch = passedEndpoint;
       // Capturing what name gets passed into function
       if (passedEndpoint == "popular") {
         endpointName = passedEndpoint;
@@ -214,7 +222,9 @@ export default {
         params: {
           movieID: movieDetails.id,
           baseURL: this.baseURL,
-          apikey: this.apikey
+          apikey: this.apikey,
+          endpoint: this.endpoint,
+          current: this.current
         }
       });
     },
@@ -232,7 +242,7 @@ export default {
     }
   },
   mounted() {
-    this.paginationFunction("popular", 1);
+    this.paginationFunction(this.endpoint, 1);
   }
 };
 </script>
@@ -320,14 +330,10 @@ export default {
   margin: 10px 0 10px 50px;
 }
 
-.popular-btn:hover .fa-star {
-  color: #f1c40f;
-}
-.top-rated-btn:hover .fa-chart-bar {
-  color: #f1c40f;
-}
+.popular-btn:hover .fa-star,
+.top-rated-btn:hover .fa-chart-bar,
 .now-playing-btn:hover .fa-play-circle {
-  color: #f1c40f;
+  color: #d4ac0d;
 }
 
 #pagination-container {
@@ -343,6 +349,9 @@ export default {
 .current {
   background-color: rgb(56, 184, 131) !important;
   color: white !important;
+}
+.currentSearch {
+  color: rgb(56, 184, 131);
 }
 /* ==================================================== */
 /* ================== Loading Styles ================== */

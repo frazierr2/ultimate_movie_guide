@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>
+      <router-link v-if="$route.path != '/'" to="/">Ultimate Movie Guide</router-link>
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -39,8 +39,11 @@ html {
 }
 
 #nav a {
-  font-weight: 100;
-  color: white;
+  font-family: "Bangers", cursive;
+  font-size: 20px;
+  color: #e50614;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
 }
 
 #nav a.router-link-exact-active {
