@@ -56,14 +56,18 @@ export default {
     "orderAscDesc",
     "moviesReturned",
     "moviesArray",
-    "loading"
+    "loading",
+    "apikey",
+    "baseURL",
+    "current",
+    "endpoint"
   ],
   data() {
     return {
       orderStatusText: "",
       orderAscDescOrientation: this.orderAscDesc,
-      oldMoviesArray: this.moviesArray,
-      newMoviesArray: []
+      newMoviesArray: [],
+      newCurrent: this.current
     };
   },
   watch: {
@@ -85,9 +89,23 @@ export default {
       this.newMoviesArray.push(orderOfArray);
 
       this.$emit("newMoviesArray", this.newMoviesArray, this.orderStatusText);
+    },
+    // Gets object by index and passes to detail view to display more data
+    getDetails(index) {
+      let movieDetails = this.moviesArray[0][index];
+
+      this.$router.push({
+        name: "movieDetails",
+        params: {
+          movieID: movieDetails.id,
+          baseURL: this.baseURL,
+          apikey: this.apikey,
+          endpoint: this.endpoint,
+          current: this.current
+        }
+      });
     }
-  },
-  computed: {}
+  }
 };
 </script>
 

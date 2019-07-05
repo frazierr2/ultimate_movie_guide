@@ -20,6 +20,10 @@
           :moviesReturned="moviesReturned"
           @newMoviesArray="sortArrays( ...arguments)"
           :loading="loading"
+          :apikey="apikey"
+          :baseURL="baseURL"
+          :current="current"
+          :endpoint="endpoint"
         />
       </b-row>
     </b-container>
@@ -42,7 +46,6 @@ import SearchInput from "@/components/SearchInput.vue";
 import FilterButtons from "@/components/FilterButtons.vue";
 import MovieList from "@/components/MovieList.vue";
 import { baseURL, apikey } from "@/assets/key.js";
-// import _ from "lodash";
 import { setTimeout } from "timers";
 export default {
   name: "search",
@@ -74,6 +77,7 @@ export default {
     moviesArray() {}
   },
   methods: {
+    // Reusable AJAX call to the Movie DB with unique URL's passed in
     ajaxCall(url) {
       fetch(url, {
         method: "get"
@@ -122,10 +126,11 @@ export default {
       this.selectedOption = this.searchTerm;
       this.moviesReturned = false;
       this.endpoint = "search";
+      // Start loading spinner
       setTimeout(() => {
         this.loading = true;
       }, 500);
-
+      // Delay creation of URL to give user time to type search term
       setTimeout(() => {
         var encodedTerm = encodeURI(this.searchTerm),
           url = `${this.baseURL}${this.endpoint}/movie?api_key=${this.apikey}&query=${encodedTerm}`;
@@ -141,21 +146,6 @@ export default {
       this.generateMovieList(endpoint, pageNumber);
       this.current = pageNumber;
     },
-    // Gets object by index and passes to detail view to display more data
-    getDetails(index) {
-      let movieDetails = this.moviesArray[0][index];
-
-      this.$router.push({
-        name: "movieDetails",
-        params: {
-          movieID: movieDetails.id,
-          baseURL: this.baseURL,
-          apikey: this.apikey,
-          endpoint: this.endpoint,
-          current: this.current
-        }
-      });
-    },
     sortArrays(arrayOrder, sortText) {
       this.moviesArray = [];
       this.orderStatus = sortText;
@@ -163,11 +153,15 @@ export default {
     }
   },
   mounted() {
-    this.paginationFunction(this.endpoint, 1);
+    // Captures if users were on differet pagination page and goes back to same spot
+    if (Object.keys(this.$attrs).length === 0) {
+      this.paginationFunction(this.endpoint, 1);
+    } else {
+      this.paginationFunction(this.$attrs.endpoint, this.$attrs.current);
+    }
   }
 };
 </script>
-
 
 
 <style scoped>

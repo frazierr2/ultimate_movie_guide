@@ -4,7 +4,7 @@
       <div class="movie-detail-container">
         <b-row no-gutters>
           <b-col cols="2" md="1" style="margin:auto;">
-            <router-link class="back-link" to="/search">
+            <router-link class="back-link" :to="{ name: 'search', params: { endpoint, current } }">
               <font-awesome-icon class="back-arrow" icon="long-arrow-alt-left" />
               <span class="back">BACK</span>
             </router-link>
@@ -104,6 +104,7 @@ export default {
   watch: {
     movieDetails() {}
   },
+  //Capture data before page fully loads
   beforeMount() {
     this.getMovieDetails();
     this.getMovieVideos();
