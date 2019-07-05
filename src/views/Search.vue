@@ -1,21 +1,6 @@
 <template>
   <div id="search-container">
-    <font-awesome-icon class="search-icon" icon="search" />
-    <input
-      id="searchInput"
-      class="mb-2 mr-sm-2 mb-sm-0"
-      placeholder="Search Ultimate Movie Guide"
-      v-model="searchTerm"
-      @keydown.enter="searchDB"
-    />
-    <font-awesome-icon
-      v-if="searchTerm.length"
-      class="clear-icon"
-      icon="times-circle"
-      @click="paginationFunction('popular', 1)"
-    />
-
-    <b-container id="movie-list-container" class="mt-3" fluid>
+    <!-- <b-container id="movie-list-container" class="mt-3" fluid>
       <b-row class="movie-list-container-row">
         <b-col class="button-column" cols="2" md="1">
           <div class="button-rows">
@@ -102,8 +87,8 @@
           </b-row>
         </b-col>
       </b-row>
-    </b-container>
-    <div id="pagination-container">
+    </b-container>-->
+    <!-- <div id="pagination-container">
       <b-button
         v-for="pageNumber in pageNumbers"
         :key="pageNumber"
@@ -112,19 +97,22 @@
         @click="paginationFunction(endpoint, pageNumber)"
         :class="{current:pageNumber == current}"
       >{{ pageNumber }}</b-button>
-    </div>
+    </div>-->
   </div>
 </template>
 
-// @click="generateMovieList(endpoint, pageNumber); current = pageNumber"
 
 <script>
+import SearchInput from "@/components/SearchInput.vue";
 import { baseURL, apikey } from "@/assets/key.js";
 import _ from "lodash";
 import { setTimeout } from "timers";
 export default {
   name: "search",
   props: {},
+  components: {
+    SearchInput
+  },
   data() {
     return {
       apikey: apikey,
@@ -253,10 +241,10 @@ export default {
 #search-container {
   padding: 0 15px;
 }
-#searchInput {
+/* #searchInput {
   width: 50%;
   padding-left: 30px;
-}
+} */
 #movie-list-container {
   /* height: 85vh; */
   height: 79vh;
@@ -291,7 +279,7 @@ export default {
   /* background: white; */
   background-color: rgba(255, 255, 255, 0.7);
 }
-.search-icon {
+/* .search-icon {
   left: 23px;
   position: relative;
   color: lightgrey;
@@ -300,7 +288,7 @@ export default {
   position: relative;
   right: 33px;
   color: #b31b1e;
-}
+} */
 
 .button-rows {
   height: 100px;
